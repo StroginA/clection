@@ -6,5 +6,8 @@
     "nav.theme": "Тема",
     "test.apiresponse": "Соединение с API установлено",
     "test.dbresponse": "Соединение с базой данных установлено",
-    "locale.languagename": "Русский"
+    "test.content": "Текст на стороне клиента",
+    "locale.languagename": "Русский",
+    "locale.en": "English",
+    "locale.ru": "Русский"
 }

@@ -6,5 +6,8 @@
     "nav.theme": "Theme",
     "test.apiresponse": "Connection to API established",
     "test.dbresponse": "Connection to DB established",
-    "locale.languagename": "English"
+    "test.content": "Client-side text",
+    "locale.languagename": "English",
+    "locale.en": "English",
+    "locale.ru": "Русский"
 }

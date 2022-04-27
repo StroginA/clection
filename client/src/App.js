@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
-import {IntlProvider} from 'react-intl';
+import {FormattedMessage, IntlProvider} from 'react-intl';
 import locales from "./shared/constants/locales";
 import themes from "./shared/constants/themes";
 import localStorageKeys from "./shared/constants/localStorageKeys";
 import enMessages from './shared/locale/en.json';
 import ruMessages from './shared/locale/ru.json';
 
-import Header from './common/header/Header.jsx';
+import Header from './common/header/Header';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -32,13 +31,16 @@ class App extends Component {
 	render(){
 		return (
 			<div className="App">
-				<IntlProvider locale={currentLocale} messages={messages[currentLocale]}>
+				<IntlProvider locale={this.state.currentLocale} messages={messages[this.state.currentLocale]}>
 					<Header 
 						currentLocale={this.state.currentLocale}
 						setCurrentLocale={
 							(x) => {this.setState({currentLocale: x})}
 						}
 					/>
+					<div>
+						<FormattedMessage id="test.content" />
+					</div>
 				</IntlProvider>
 			</div>
 		);
