@@ -1,0 +1,10 @@
+{
+    "nav.search": "Search",
+    "nav.signin": "Sign in",
+    "nav.signout": "Sign out",
+    "nav.language": "Language",
+    "nav.theme": "Theme",
+    "test.apiresponse": "Connection to API established",
+    "test.dbresponse": "Connection to DB established",
+    "locale.languagename": "English"
+}

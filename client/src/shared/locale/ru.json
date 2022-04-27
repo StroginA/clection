@@ -1,0 +1,10 @@
+{
+    "nav.search": "Поиск",
+    "nav.signin": "Вход",
+    "nav.signout": "Выход",
+    "nav.language": "Язык",
+    "nav.theme": "Тема",
+    "test.apiresponse": "Соединение с API установлено",
+    "test.dbresponse": "Соединение с базой данных установлено",
+    "locale.languagename": "Русский"
+}
