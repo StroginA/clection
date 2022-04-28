@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './App.css';
+import './App.scss';
 import axios from 'axios';
 import {FormattedMessage, IntlProvider} from 'react-intl';
 import locales from './shared/constants/locales';
@@ -9,7 +9,7 @@ import enMessages from './shared/locale/en.json';
 import ruMessages from './shared/locale/ru.json';
 
 import Header from './common/header/Header';
-import { Container, Section } from 'react-bulma-components';
+import { Section } from 'react-bulma-components';
 
 const messages = {
 	[locales.EN]: enMessages,

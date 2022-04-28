@@ -22,6 +22,8 @@ class LocalePicker extends React.Component {
                 icon={<Icon><i aria-hidden="true" className="fas fa-angle-down"/></Icon>}
                 label={<FormattedMessage id="nav.language" />}
                 onChange={this.handleChange}
+                right='false'
+                hoverable='true'
             >
                 <Dropdown.Item
                     renderAs="a"

@@ -1,6 +1,6 @@
 import React from 'react';
 import LocalePicker from '../localePicker/LocalePicker';
-import {Box, Heading, Navbar} from 'react-bulma-components';
+import {Heading, Navbar} from 'react-bulma-components';
 import {injectIntl} from 'react-intl';
 
 class Header extends React.Component {
