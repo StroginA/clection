@@ -4,10 +4,10 @@
     "nav.signout": "Sign out",
     "nav.language": "Language",
     "nav.theme": "Theme",
-    "test.apiresponse": "Connection to API established",
-    "test.dbresponse": "Connection to DB established",
-    "test.content": "Client-side text",
     "locale.languagename": "English",
     "locale.en": "English",
-    "locale.ru": "Русский"
+    "locale.ru": "Русский",
+    "test.apiresponse": "Connection to API established",
+    "test.dbresponse": "Connection to DB established",
+    "test.content": "Client-side text"
 }

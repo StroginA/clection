@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import './App.css';
 import axios from 'axios';
 import {FormattedMessage, IntlProvider} from 'react-intl';
-import locales from "./shared/constants/locales";
-import themes from "./shared/constants/themes";
-import localStorageKeys from "./shared/constants/localStorageKeys";
+import locales from './shared/constants/locales';
+import themes from './shared/constants/themes';
+import localStorageKeys from './shared/constants/localStorageKeys';
 import enMessages from './shared/locale/en.json';
 import ruMessages from './shared/locale/ru.json';
 
 import Header from './common/header/Header';
+import { Container, Section } from 'react-bulma-components';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -32,15 +33,17 @@ class App extends Component {
 		return (
 			<div className="App">
 				<IntlProvider locale={this.state.currentLocale} messages={messages[this.state.currentLocale]}>
+					<Section>
 					<Header 
 						currentLocale={this.state.currentLocale}
 						setCurrentLocale={
 							(x) => {this.setState({currentLocale: x})}
 						}
 					/>
-					<div>
+					</Section>
+					<Section>
 						<FormattedMessage id="test.content" />
-					</div>
+					</Section>
 				</IntlProvider>
 			</div>
 		);

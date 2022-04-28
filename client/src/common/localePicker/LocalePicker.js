@@ -1,7 +1,7 @@
-import React from "react";
-import {FormattedMessage} from "react-intl";
-import locales from "../../shared/constants/locales";
-import localStorageKeys from "../../shared/constants/localStorageKeys";
+import React from 'react';
+import {FormattedMessage} from 'react-intl';
+import locales from '../../shared/constants/locales';
+import localStorageKeys from '../../shared/constants/localStorageKeys';
 import {Dropdown, Icon} from 'react-bulma-components';
 
 class LocalePicker extends React.Component {
