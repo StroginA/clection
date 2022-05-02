@@ -1,1 +1,7 @@
-@import "node_modules/bulmaswatch/darkly/bulmaswatch";
+.App {
+    @import 'bulmaswatch/darkly/bulmaswatch.scss';
+}
+
+.light-theme {
+    @import 'bulmaswatch/flatly/bulmaswatch.scss';
+}

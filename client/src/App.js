@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
-import './App.scss';
+
 import axios from 'axios';
 import {FormattedMessage, IntlProvider} from 'react-intl';
 import locales from './shared/constants/locales';
-import themes from './shared/constants/themes';
 import localStorageKeys from './shared/constants/localStorageKeys';
 import enMessages from './shared/locale/en.json';
 import ruMessages from './shared/locale/ru.json';
+import './App.scss';
 
 import Header from './common/header/Header';
 import { Section } from 'react-bulma-components';
+import ThemeContextWrapper from './shared/constants/ThemeContextWrapper';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -18,8 +19,7 @@ const messages = {
 
 class App extends Component {
 	state = {
-		currentLocale: localStorage.getItem(localStorageKeys.LOCALE) || locales.EN,
-		currentTheme: localStorage.getItem(localStorageKeys.THEME) || themes.LIGHT
+		currentLocale: localStorage.getItem(localStorageKeys.LOCALE) || locales.EN
 	}
 	
 	componentDidMount = async () => {
@@ -42,7 +42,7 @@ class App extends Component {
 					/>
 					</Section>
 					<Section>
-						<FormattedMessage id="test.content" />
+						<FormattedMessage id='test.content' />
 					</Section>
 				</IntlProvider>
 			</div>

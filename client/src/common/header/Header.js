@@ -2,6 +2,7 @@ import React from 'react';
 import LocalePicker from '../localePicker/LocalePicker';
 import {Heading, Navbar} from 'react-bulma-components';
 import {injectIntl} from 'react-intl';
+import ThemeSwitch from '../themeSwitch/ThemeSwitch';
 
 class Header extends React.Component {
     render(){
@@ -23,6 +24,7 @@ class Header extends React.Component {
                     </Navbar.Item>
                 </Navbar.Container>
                 <Navbar.Container align='end'>
+                    <ThemeSwitch />
                     <LocalePicker currentLocale={this.props.currentLocale} onLocaleChanged={this.props.setCurrentLocale} />
                 </Navbar.Container>
                 </Navbar.Menu>
