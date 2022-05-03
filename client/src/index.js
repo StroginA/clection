@@ -3,16 +3,13 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import ThemeContextWrapper from './shared/constants/ThemeContextWrapper';
 import './index.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <ThemeContextWrapper>
   <React.StrictMode>
     <App />
   </React.StrictMode>
-  </ThemeContextWrapper>
 );
 
 // If you want to start measuring performance in your app, pass a function

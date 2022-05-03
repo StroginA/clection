@@ -9,8 +9,12 @@ import ruMessages from './shared/locale/ru.json';
 import './App.scss';
 
 import Header from './common/header/Header';
-import { Section } from 'react-bulma-components';
+import { Box, Section } from 'react-bulma-components';
 import ThemeContextWrapper from './shared/constants/ThemeContextWrapper';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './app/pages/Home';
+import Layout from './app/pages/Layout';
+import SigninPage from './app/pages/SigninPage';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -29,21 +33,29 @@ class App extends Component {
 		console.log(q.data);
 	}
 	
-	render(){
+	render() {
 		return (
 			<div className="App">
 				<IntlProvider locale={this.state.currentLocale} messages={messages[this.state.currentLocale]}>
-					<Section>
-					<Header 
-						currentLocale={this.state.currentLocale}
-						setCurrentLocale={
-							(x) => {this.setState({currentLocale: x})}
-						}
-					/>
-					</Section>
-					<Section>
-						<FormattedMessage id='test.content' />
-					</Section>
+					<ThemeContextWrapper>
+						<BrowserRouter>
+						<Routes>
+								<Route
+									path="/"
+									element={
+										<Layout
+											currentLocale={this.state.currentLocale}
+											setCurrentLocale={
+												(x) => { this.setState({ currentLocale: x }) }
+											} />
+									}
+								>
+									<Route index element={<Home />} />
+									<Route path='signin' element={<SigninPage />} />
+								</Route>
+						</Routes>
+						</BrowserRouter>
+					</ThemeContextWrapper>
 				</IntlProvider>
 			</div>
 		);

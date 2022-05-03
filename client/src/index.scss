@@ -1,7 +1,7 @@
 .App {
-    @import 'bulmaswatch/darkly/bulmaswatch.scss';
+    @import './shared/constants/dark.scss';
 }
 
 .light-theme {
-    @import 'bulmaswatch/flatly/bulmaswatch.scss';
+    @import './shared/constants/light.scss';
 }

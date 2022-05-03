@@ -7,6 +7,13 @@
     "locale.languagename": "English",
     "locale.en": "English",
     "locale.ru": "Русский",
+    "signin.signin": "Sign in",
+    "signin.signup": "Sign up",
+    "signin.username": "Username",
+    "signin.password": "Password",
+    "signin.invalid-credentials": "Invalid combination of username and password",
+    "signin.user-exists": "A user with this username already exists",
+    "signin.submit": "Submit",
     "test.apiresponse": "Connection to API established",
     "test.dbresponse": "Connection to DB established",
     "test.content": "Client-side text"
