@@ -15,6 +15,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './app/pages/Home';
 import Layout from './app/pages/Layout';
 import SigninPage from './app/pages/SigninPage';
+import SearchPage from './app/pages/SearchPage';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -52,6 +53,7 @@ class App extends Component {
 								>
 									<Route index element={<Home />} />
 									<Route path='signin' element={<SigninPage />} />
+									<Route path='search' element={<SearchPage />} />
 								</Route>
 						</Routes>
 						</BrowserRouter>
