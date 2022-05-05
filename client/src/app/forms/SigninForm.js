@@ -1,18 +1,45 @@
 import React from "react";
 import { injectIntl } from "react-intl";
 import { Box, Form, Icon, Heading, Button } from "react-bulma-components";
+import axios from "axios";
 
 class SigninForm extends React.Component {
     state = {
         username: "",
         password: "",
-        invalidCredentials: false
+        invalidCredentials: false,
+        error: false
     }
 
     setUsername = (x) => {this.setState({username: x})};
     setPassword = (x) => {this.setState({password: x})};
-    onSubmitEvent = (e) => {
+    onSubmitEvent = async (e) => {
         e.preventDefault();
+        axios.post(
+            '/api/v1/signin-attempt',
+            {
+                auth:
+                {
+                    username: this.state.username,
+                    password: this.state.password
+                }
+            })
+            .then(
+                // Implement signin 
+                res => console.log(res.status))
+            .catch(
+                err => {
+                    if (err.response.status === 401) {
+                        this.setState({ invalidCredentials: true })
+                    } else {
+                        this.setState({ error: true })
+                    }
+                }
+            );
+    }
+    resetErrors = () => {
+        this.setState({invalidCredentials: false});
+        this.setState({error: false});
     }
 
     render() {
@@ -29,7 +56,7 @@ class SigninForm extends React.Component {
                                 value={this.state.username}
                                 onChange={(e) => {
                                     this.setUsername(e.target.value);
-                                    this.setState({invalidCredentials: false});
+                                    this.resetErrors();
                                 }}
                             />
                             <Icon align="left" size="small">
@@ -48,7 +75,7 @@ class SigninForm extends React.Component {
                                 value={this.state.password}
                                 onChange={(e) => {
                                     this.setPassword(e.target.value);
-                                    this.setState({invalidCredentials: false});
+                                    this.resetErrors();
                                 }}
                                 type="password"
                             />
@@ -60,9 +87,13 @@ class SigninForm extends React.Component {
                             </Icon>
                         </Form.Control>
                         <Form.Help color="danger">
-                            {this.state.invalidCredentials ? 
+                            {
+                            this.state.invalidCredentials ? 
                             intl.formatMessage({ id: 'signin.invalid-credentials' }) : 
-                            ''}
+                            this.state.error ?
+                            intl.formatMessage({ id: 'general.error-message' }) :
+                            ''
+                            }
                         </Form.Help>
                     </Form.Field>
                     <Button

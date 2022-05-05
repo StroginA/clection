@@ -26,6 +26,7 @@
     "collection.brief.lastadded": "Last added to",
     "collection.brief.moreuser": "More from",
     "collection.brief.morecollection": "Browse...",
+    "general.error-message": "An error has occured",
     "test.apiresponse": "Connection to API established",
     "test.dbresponse": "Connection to DB established",
     "test.content": "Client-side text"
