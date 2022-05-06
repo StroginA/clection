@@ -11,9 +11,23 @@ class SigninForm extends React.Component {
         error: false
     }
 
+    handleUsernameChange = (e) => {
+        this.setUsername(e.target.value);
+        this.setState({invalidCredentials: false});
+        this.setState({error: false});
+    }
+
+    handlePasswordChange = (e) => {
+        this.setPassword(e.target.value);
+        this.setState({invalidCredentials: false});
+        this.setState({error: false});
+    }
+
     setUsername = (x) => {this.setState({username: x})};
     setPassword = (x) => {this.setState({password: x})};
-    onSubmitEvent = async (e) => {
+    onSubmitEvent = (e) => {
+        //stub
+        //implement hash+salt later!!!
         e.preventDefault();
         axios.post(
             '/api/v1/signin-attempt',
@@ -37,11 +51,7 @@ class SigninForm extends React.Component {
                 }
             );
     }
-    resetErrors = () => {
-        this.setState({invalidCredentials: false});
-        this.setState({error: false});
-    }
-
+    
     render() {
         const intl = this.props.intl;
         return (
@@ -54,10 +64,7 @@ class SigninForm extends React.Component {
                             <Form.Input
                                 color={this.state.invalidCredentials ? "danger" : ""}
                                 value={this.state.username}
-                                onChange={(e) => {
-                                    this.setUsername(e.target.value);
-                                    this.resetErrors();
-                                }}
+                                onChange={this.handleUsernameChange}
                             />
                             <Icon align="left" size="small">
                                 <i className="fas fa-user" />
@@ -73,10 +80,7 @@ class SigninForm extends React.Component {
                             <Form.Input
                                 color={this.state.invalidCredentials ? "danger" : ""}
                                 value={this.state.password}
-                                onChange={(e) => {
-                                    this.setPassword(e.target.value);
-                                    this.resetErrors();
-                                }}
+                                onChange={this.handlePasswordChange}
                                 type="password"
                             />
                             <Icon align="left" size="small">

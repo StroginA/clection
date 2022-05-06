@@ -1,0 +1,32 @@
+[
+    {
+        "id": 111111,
+        "userId": 111111,
+        "collectionId": 111111,
+        "name": "War and Peace",
+        "uploaded": "23.09.2001",
+        "tags": ["foo", "bar"],
+        "likes": 24,
+        "commentCount": 0
+    },
+    {
+        "id": 222222,
+        "userId": 222222,
+        "collectionId": 222222,
+        "name": "Jack Daniels",
+        "uploaded": "16.05.2015",
+        "tags": ["bar", "baz"],
+        "likes": 65,
+        "commentCount": 1
+    },
+    {
+        "id": 333333,
+        "userId": 333333,
+        "collectionId": 222222,
+        "name": "Super Mario 64",
+        "uploaded": "01.01.1999",
+        "tags": ["baz", "foo"],
+        "likes": 37,
+        "commentCount": 1
+    }
+]

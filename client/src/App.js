@@ -29,9 +29,9 @@ class App extends Component {
 	
 	componentDidMount = async () => {
 		const res = await axios.get('/api/v1/connection-check');
-		console.log(res.data);
+		console.log(res.data.body);
 		const q = await axios.get('/api/v1/db-connection-check');
-		console.log(q.data);
+		console.log(q.data.body);
 	}
 	
 	render() {

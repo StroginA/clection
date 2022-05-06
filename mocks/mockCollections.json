@@ -1,0 +1,26 @@
+[
+    {
+        "id": 111111,
+        "userId": 111111,
+        "name": "Russian Lit",
+        "category": "Books",
+        "itemCount": 1,
+        "whenLatestItem": "23.09.2001"
+    },
+    {
+        "id": 222222,
+        "userId": 222222,
+        "name": "Whiskeys",
+        "category": "Alcohol",
+        "itemCount": 1,
+        "whenLatestItem": "16.05.2015"
+    },
+    {
+        "id": 333333,
+        "userId": 333333,
+        "name": "Nintendo Cartridges",
+        "category": "Media",
+        "itemCount": 1,
+        "whenLatestItem": "01.01.1999"
+    }
+]

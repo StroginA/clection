@@ -3,22 +3,26 @@ import { Button, Card, Content, Heading, Media, Tag } from "react-bulma-componen
 import { injectIntl } from "react-intl";
 
 class ItemBrief extends React.Component {
-    state = {
-        title: "Test Item",
-        type: "Test Type",
-        whenUploaded: "today",
-        tags: ["foo", "bar", "baz"],
-        likes: 0,
-        commentCount: 0,
-        user: "Alice",
-        collection: "Foobarbaz"
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: "Test Item",
+            category: "Test Category",
+            whenUploaded: "today",
+            tags: ["foo", "bar", "baz"],
+            likes: 0,
+            commentCount: 0,
+            user: "Alice",
+            collection: "Foobarbaz"
+        }
     }
+    
     render() {
         const intl = this.props.intl;
         return (
             <Card>
                 <Card.Header>
-                    <Card.Header.Title textSize={3}>{this.state.title}</Card.Header.Title>
+                    <Card.Header.Title textSize={3}>{this.state.name}</Card.Header.Title>
                 </Card.Header>
                 <Card.Content>
                     <Content>
@@ -28,7 +32,7 @@ class ItemBrief extends React.Component {
                         <Tag>{this.state.tags[2]}</Tag>
                     </Tag.Group>
                     <p>
-                        <strong>{intl.formatMessage({id: "item.brief.category"})}:</strong> {this.state.type}
+                        <strong>{intl.formatMessage({id: "item.brief.category"})}:</strong> {this.state.category}
                     </p>
                     <p>
                         <strong>{intl.formatMessage({id: "item.brief.likes"})}:</strong> {this.state.likes}
