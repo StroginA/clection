@@ -1,3 +1,5 @@
+const { sequelize } = require('../sequelize');
+
 const connectionCheck = (req, res, next) => {
     res.status(200).json({
         body: 'Connection to server established.'
@@ -5,11 +7,14 @@ const connectionCheck = (req, res, next) => {
 };
 
 const dbConnectionCheck = async (req, res, next) => {
-    const { testFetch } = require('../testFetch');
-    const testData = await testFetch();
-    res.status(200).json({
-        body: testData
-    }); 
+    try {
+        await sequelize.authenticate();
+        res.status(200).json({
+            body: 'Connection to DB established.'
+        }); 
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
 };
 
 const signinAttempt = (req, res, next) => {
