@@ -1,4 +1,4 @@
-const { sequelize } = require('../sequelize');
+const db = require('../db/models/index');
 
 const connectionCheck = (req, res, next) => {
     res.status(200).json({
@@ -8,7 +8,7 @@ const connectionCheck = (req, res, next) => {
 
 const dbConnectionCheck = async (req, res, next) => {
     try {
-        await sequelize.authenticate();
+        await db.sequelize.authenticate();
         res.status(200).json({
             body: 'Connection to DB established.'
         }); 

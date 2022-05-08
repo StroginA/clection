@@ -183,6 +183,8 @@ class SignupForm extends React.Component {
                             {
                             this.state.confirmPassword && !this.state.passwordsMatch ? 
                             intl.formatMessage({ id: 'signin.password-no-match' }) : 
+                            this.state.error ?
+                            intl.formatMessage({ id: 'general.error-message' }) :
                             ''
                             }
                         </Form.Help>
