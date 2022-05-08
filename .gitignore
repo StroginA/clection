@@ -107,4 +107,4 @@ dist
 dev_queries.txt
 
 # DB config
-.config/
+config
