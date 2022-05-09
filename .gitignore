@@ -105,6 +105,3 @@ dist
 
 # Testing and assistance files used during development
 dev_queries.txt
-
-# DB config
-config

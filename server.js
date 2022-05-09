@@ -1,11 +1,8 @@
+require("dotenv").config({ path: ".env", debug: true });
 const path = require('path');
-require('dotenv').config({path: './config/.env', debug: true});
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-
-console.log(process.env);
 
 const app = express();
 const port = process.env.PORT || 5000;
