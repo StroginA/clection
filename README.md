@@ -10,7 +10,7 @@ General:
 - [ ] Full-text search
 - [ ] Front page has...
 - [ ] ...last added items
-- [ ] ...largest collections
+- [X] ...largest collections
 - [ ] ...a tag cloud
 - [ ] Properly displayed in mobile
 
