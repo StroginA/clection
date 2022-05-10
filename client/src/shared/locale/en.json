@@ -25,6 +25,7 @@
     "item.brief.uploaded": "Uploaded",
     "item.brief.moreuser": "More from",
     "item.brief.morecollection": "More in",
+    "collection.brief.user": "Owner",
     "collection.brief.category": "Category",
     "collection.brief.item-count": "Items",
     "collection.brief.lastadded": "Last added to",

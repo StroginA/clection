@@ -10,7 +10,11 @@ class LargestCollections extends React.Component {
         error: false
     }
 
-    componentDidMount = async () => {
+    componentDidMount = () => {
+        this.fetchCollections();
+    }
+
+    fetchCollections = async () => {
         await axios.get('/api/v1/fetch-largest-collections')
         .then(res => {
             this.setState({largest: res.data.body});
@@ -19,29 +23,11 @@ class LargestCollections extends React.Component {
     }
 
     Collections = () => {
-        const largest = this.state.largest;
-        console.log(largest);
-        if (!largest) {
-            return (
-                 <Level.Side aligns="left">
-                    <Level.Item>
-                        <CollectionBrief />
-                    </Level.Item>
-                    <Level.Item>
-                        <CollectionBrief />
-                    </Level.Item>
-                    <Level.Item>
-                        <CollectionBrief />
-                    </Level.Item>
-                </Level.Side>
-            )
-        } else {
-            return (
-                <Level.Side aligns="left">
-                    {largest.map(this.wrapElement)}
-                </Level.Side>
-            )
-        }
+        return (
+            <Level.Side aligns="left">
+                {this.state.largest.map(this.wrapElement)}
+            </Level.Side>
+        )
     }
 
     wrapElement = (props) => {

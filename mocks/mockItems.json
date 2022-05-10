@@ -22,7 +22,7 @@
     {
         "id": 333333,
         "userId": 333333,
-        "collectionId": 222222,
+        "collectionId": 333333,
         "name": "Super Mario 64",
         "uploaded": "01.01.1999",
         "tags": ["baz", "foo"],

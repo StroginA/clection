@@ -55,12 +55,37 @@ const isUsernameAvailable = (req, res, next) => {
     };
 }
 
-const fetchLargestCollections = (req, res, next) => {
+const fetchLargestCollections = async (req, res, next) => {
     // stub
-    const mockUsers = require('../mocks/mockUsers.json');
-    const mockCollections = require('../mocks/mockCollections.json');
-    const mockItems = require('../mocks/mockItems.json');
-    const largest = mockCollections;
+    const User = db.sequelize.models.User;
+    const Collection = db.sequelize.models.Collection;
+    const Item = db.sequelize.models.Item;
+    const largest = await Collection.findAll({
+        attributes: {
+            include: [
+                [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'itemCount'],
+                [db.sequelize.col('User.name'), 'user']
+            ]
+        },
+        include: 
+        [{
+            model: User,
+            attributes: [],
+            required: true,
+            duplicating: false
+        }, 
+        {
+            model: Item,
+            attributes: [],
+            required: true,
+            duplicating: false
+        }],
+        limit: 3,
+        order: [
+            [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'DESC']
+        ],
+        group: ['Collection.id', 'User.id']
+    });
     res.status(200).json({body: largest});
 }
 
