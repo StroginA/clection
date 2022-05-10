@@ -30,6 +30,8 @@ Collections:
 - [ ] ...checkbox
 - [ ] Items table
 - [ ] ...with filters and sorting
+- [ ] Optional image
+- [ ] ...off-server hosting
 
 Items:
 - [ ] Tags
