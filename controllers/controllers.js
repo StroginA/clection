@@ -17,27 +17,42 @@ const dbConnectionCheck = async (req, res, next) => {
     }
 };
 
-const signinAttempt = (req, res, next) => {
+const signinAttempt = async (req, res, next) => {
     // stub
     // implement hashing+salting later !!!
-    const mockUsers = require('../mocks/mockUsers.json');
     const auth = req.body.auth;
-    let user = "";
-    for (i in mockUsers) {
-        if (mockUsers[i].username === auth.username
-            &&
-            mockUsers[i].password === auth.password) {
-                user = auth.username;
+    const User = db.sequelize.models.User;
+    const queriedUser = await User.findOne(
+        {
+            attributes: ['password'],
+            where: {
+                name: auth.username,
+                isBlocked: false
             }
-    }
-    if (user) {
-        res.status(200).json({
-            message: `Successfully signed in as ${req.body.auth.username}.`
-        });
-    } else {
+        }
+    );
+    if (!queriedUser || (queriedUser.password != auth.password)) {
         res.status(401).json({
             message: 'Invalid combination of username and password.'
         });
+    } else {
+        const { signJwt } = require('./jwtController');
+        signJwt(auth.username,
+            (err, token) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        message: 'Error while generating session token.'
+                    });
+                } else {
+                    console.log(token);
+                    res.status(200).json({
+                        user: req.body.auth.username,
+                        token: token
+                    });
+                }
+            }
+        );
     }
 };
 
@@ -89,8 +104,29 @@ const fetchLargestCollections = async (req, res, next) => {
     res.status(200).json({body: largest});
 }
 
+const fetchUserProfile = async (req, res, next) => {
+    const User = db.sequelize.models.User;
+    console.log(req.params)
+    queriedUser = await User.findOne(
+        {
+            attributes: ['name'],
+            where: {
+                name: req.params.name
+            }
+        }
+    );
+    if (!queriedUser) {
+        res.status(404).end()
+    } else {
+        res.status(200).json({
+            name: queriedUser.name
+        })
+    }
+}
+
 module.exports.connectionCheck = connectionCheck;
 module.exports.dbConnectionCheck = dbConnectionCheck;
 module.exports.signinAttempt = signinAttempt;
 module.exports.isUsernameAvailable = isUsernameAvailable;
 module.exports.fetchLargestCollections = fetchLargestCollections;
+module.exports.fetchUserProfile = fetchUserProfile;

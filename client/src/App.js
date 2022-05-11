@@ -8,14 +8,15 @@ import enMessages from './shared/locale/en.json';
 import ruMessages from './shared/locale/ru.json';
 import './App.scss';
 
-import Header from './common/header/Header';
-import { Box, Section } from 'react-bulma-components';
 import ThemeContextWrapper from './shared/constants/ThemeContextWrapper';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './app/pages/Home';
 import Layout from './app/pages/Layout';
 import SigninPage from './app/pages/SigninPage';
 import SearchPage from './app/pages/SearchPage';
+import ProfilePage from './app/pages/ProfilePage';
+import AuthProvider from './shared/constants/AuthProvider';
+import { AuthContext } from './shared/constants/AuthContext';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -23,9 +24,12 @@ const messages = {
   };
 
 class App extends Component {
+	static ContextType = AuthContext;
 	state = {
 		currentLocale: localStorage.getItem(localStorageKeys.LOCALE) || locales.EN
 	}
+
+
 	
 	componentDidMount = async () => {
 		const res = await axios.get('/api/v1/connection-check');
@@ -35,6 +39,7 @@ class App extends Component {
 	}
 	
 	render() {
+		console.log(this.context);
 		return (
 			<div className="App">
 				<IntlProvider locale={this.state.currentLocale} messages={messages[this.state.currentLocale]}>
@@ -54,6 +59,8 @@ class App extends Component {
 									<Route index element={<Home />} />
 									<Route path='signin' element={<SigninPage />} />
 									<Route path='search' element={<SearchPage />} />
+									<Route path='profile' element={<ProfilePage user={this.context.user} />}>
+									</Route>
 								</Route>
 						</Routes>
 						</BrowserRouter>

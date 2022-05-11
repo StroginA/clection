@@ -7,5 +7,6 @@ router.get('/db-connection-check', controllers.dbConnectionCheck);
 router.post('/signin-attempt', controllers.signinAttempt);
 router.put('/is-username-available', controllers.isUsernameAvailable);
 router.get('/fetch-largest-collections', controllers.fetchLargestCollections);
+router.get('/fetch-user-profile', controllers.fetchUserProfile);
 
 module.exports = router;

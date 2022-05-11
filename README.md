@@ -39,3 +39,8 @@ Items:
 - [ ] Comments
 - [ ] ...updated in real time
 - [ ] Likes (1 per user)
+
+
+# Issues
+
+- <App /> auth context apparently fails to update

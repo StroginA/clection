@@ -2,14 +2,20 @@ import React from "react";
 import { injectIntl } from "react-intl";
 import { Box, Form, Icon, Heading, Button } from "react-bulma-components";
 import axios from "axios";
+import { AuthContext } from "../../shared/constants/AuthContext";
+import { injectRouter } from "../../shared/constants/injectRouter";
 
 class SigninForm extends React.Component {
+    static contextType = AuthContext;
+
     state = {
         username: "",
         password: "",
         invalidCredentials: false,
         error: false
     }
+
+    navigate = this.props.navigate;
 
     handleUsernameChange = (e) => {
         this.setUsername(e.target.value);
@@ -40,13 +46,19 @@ class SigninForm extends React.Component {
             })
             .then(
                 // Implement signin 
-                res => console.log(res.status))
+                res => {
+                    this.context.signin(res.data);
+                    this.navigate("/");
+                }
+            )
             .catch(
                 err => {
+                    console.log(err);
                     if (err.response.status === 401) {
                         this.setState({ invalidCredentials: true })
                     } else {
-                        this.setState({ error: true })
+                        console.log(err.response.data.message);
+                        this.setState({ error: true });
                     }
                 }
             );
@@ -112,4 +124,4 @@ class SigninForm extends React.Component {
     }
 }
 
-export default injectIntl(SigninForm);
+export default injectRouter(injectIntl(SigninForm));
