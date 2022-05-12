@@ -12,6 +12,7 @@ class SignupForm extends React.Component {
         userExists: false,
         userAvailable: false,
         passwordsMatch: false,
+        signupSuccessful: false,
         error: false
     }
 
@@ -19,27 +20,30 @@ class SignupForm extends React.Component {
         this.setState({ userExists: false });
         this.setState({ userAvailable: false });
         this.setState({ error: false });
+        this.setState({ signupSuccessful: false });
         this.setUsername(e.target.value);
         this.checkUsername(e.target.value);
     }
 
     handlePasswordChange = (e) => {
         this.setState({error: false});
+        this.setState({ signupSuccessful: false });
         this.setPassword(e.target.value);
         this.setState({passwordsMatch: e.target.value === this.state.confirmPassword});
     }
 
     handleConfirmPasswordChange = (e) => {
         this.setState({error: false});
+        this.setState({ signupSuccessful: false });
         this.setConfirmPassword(e.target.value);
         this.setState({passwordsMatch: this.state.password === e.target.value});
     }
 
     checkUsername = debounce((x) => {
-        if (x) axios.put(
+        if (x) axios.get(
             '/api/v1/is-username-available',
             {
-                username: x
+                params: {username: x}
             })
             .then(res => {
                 this.setState({userAvailable: true});
@@ -59,8 +63,29 @@ class SignupForm extends React.Component {
     setPassword = (x) => this.setState({password: x});
     setConfirmPassword = (x) => this.setState({confirmPassword: x});
     onSubmitEvent = (e) => {
-        //stub
+        // stub
+        // salt and hash password
         e.preventDefault();
+        axios.post(
+            'api/v1/signup-attempt',
+            {
+                auth: 
+                {
+                    username: this.state.username,
+                    password: this.state.password
+                }
+            }
+        )
+        .then(
+            res => {
+                this.setState({signupSuccessful: true});
+            }
+        )
+        .catch(
+            err => {
+                this.setState({error: true});
+            }
+        )
     }
 
     render() {

@@ -18,7 +18,7 @@ class Header extends React.Component {
         return (
             <Navbar fixed='top' alignItems='center'>
                 <Navbar.Brand>
-                    <Navbar.Item>
+                    <Navbar.Item renderAs='div'>
                         <Link to={"/"}>
                             <Heading size='1'>Clection</Heading>
                         </Link>
@@ -26,7 +26,7 @@ class Header extends React.Component {
                 </Navbar.Brand>
                 <Navbar.Menu>
                 <Navbar.Container>
-                    <Navbar.Item>
+                    <Navbar.Item renderAs='div'>
                         <Link to={'search'}>
                             {intl.formatMessage({ id: 'nav.search' })}
                         </Link>
@@ -34,7 +34,7 @@ class Header extends React.Component {
                     {
                     !this.context.user 
                     &&
-                    <Navbar.Item>
+                    <Navbar.Item renderAs='div'>
                         <Link to={'signin'}>
                             {intl.formatMessage({ id: 'nav.signin' })}
                         </Link>
@@ -43,8 +43,8 @@ class Header extends React.Component {
                     {
                     this.context.user 
                     &&
-                    <Navbar.Item>
-                        <Link to={'profile'}>
+                    <Navbar.Item renderAs='div'>
+                        <Link to={`profile/${this.context.user}`}>
                             {intl.formatMessage({ id: 'nav.profile' })}: {this.context.user}
                         </Link>
                     </Navbar.Item>
@@ -53,6 +53,7 @@ class Header extends React.Component {
                     this.context.user 
                     &&
                     <Navbar.Item
+                    renderAs='div'
                     onClick={this.handleSignout}
                     >
                         <Link to={'signin'}>

@@ -1,4 +1,7 @@
 const db = require('../db/models/index');
+const User = db.sequelize.models.User;
+const Collection = db.sequelize.models.Collection;
+const Item = db.sequelize.models.Item;
 
 const connectionCheck = (req, res, next) => {
     res.status(200).json({
@@ -17,14 +20,36 @@ const dbConnectionCheck = async (req, res, next) => {
     }
 };
 
+const signupAttempt = async (req, res, next) => {
+    const auth = req.body.auth;
+    const queriedUser = await User.findOne(
+        {
+            attributes: ['name'],
+            where: {
+                name: auth.username
+            }
+        }
+    );
+    if (!queriedUser) {
+        hashedPassword = auth.password
+        // hash password!
+        await User.create({
+            name: auth.username,
+            password: hashedPassword
+        })
+        res.status(201).json({message: 'Signup successful.'});
+    } else {
+        res.status(409).json({message: 'This username is taken.'});
+    };
+}
+
 const signinAttempt = async (req, res, next) => {
     // stub
     // implement hashing+salting later !!!
     const auth = req.body.auth;
-    const User = db.sequelize.models.User;
     const queriedUser = await User.findOne(
         {
-            attributes: ['password'],
+            attributes: ['password', 'isAdmin'],
             where: {
                 name: auth.username,
                 isBlocked: false
@@ -45,10 +70,10 @@ const signinAttempt = async (req, res, next) => {
                         message: 'Error while generating session token.'
                     });
                 } else {
-                    console.log(token);
                     res.status(200).json({
                         user: req.body.auth.username,
-                        token: token
+                        token: token,
+                        isAdmin: queriedUser.isAdmin
                     });
                 }
             }
@@ -56,14 +81,18 @@ const signinAttempt = async (req, res, next) => {
     }
 };
 
-const isUsernameAvailable = (req, res, next) => {
+const isUsernameAvailable = async (req, res, next) => {
     // stub
-    const mockUsers = require('../mocks/mockUsers.json');
-    let taken = false;
-    for (i in mockUsers) {
-        if (mockUsers[i].username === req.body.username) taken = true;
-    }
-    if (!taken) {
+    // make it generate salt to be used for password
+    const queriedUser = await User.findOne(
+        {
+            attributes: ['name'],
+            where: {
+                name: req.query.username
+            }
+        }
+    );
+    if (!queriedUser) {
         res.status(200).json({message: 'This username is available.'});
     } else {
         res.status(409).json({message: 'This username is taken.'});
@@ -72,9 +101,6 @@ const isUsernameAvailable = (req, res, next) => {
 
 const fetchLargestCollections = async (req, res, next) => {
     // stub
-    const User = db.sequelize.models.User;
-    const Collection = db.sequelize.models.Collection;
-    const Item = db.sequelize.models.Item;
     const largest = await Collection.findAll({
         attributes: {
             include: [
@@ -105,13 +131,11 @@ const fetchLargestCollections = async (req, res, next) => {
 }
 
 const fetchUserProfile = async (req, res, next) => {
-    const User = db.sequelize.models.User;
-    console.log(req.params)
-    queriedUser = await User.findOne(
+    const queriedUser = await User.findOne(
         {
-            attributes: ['name'],
+            attributes: ['name', 'isBlocked', 'isAdmin'],
             where: {
-                name: req.params.name
+                name: req.query.name
             }
         }
     );
@@ -119,9 +143,57 @@ const fetchUserProfile = async (req, res, next) => {
         res.status(404).end()
     } else {
         res.status(200).json({
-            name: queriedUser.name
+            ...queriedUser.dataValues
         })
     }
+}
+
+const verifySession = async (req, res, next) => {
+    /*
+    Verify received token.
+    If successful, fetch current blocked/admin status from DB
+    Respond with {user, token: newToken, isAdmin}
+    If unsuccessful/user deleted/blocked, respond with 401
+    */
+    const token = req.query.token
+    const { verifyJwt } = require('./jwtController');
+    verifyJwt(token,
+        async (err, payload) => {
+            if (payload) {
+                const queriedUser = await User.findOne(
+                    {
+                        attributes: ['name', 'isBlocked', 'isAdmin'],
+                        where: {
+                            name: payload.username
+                        }
+                    }
+                );
+                if (!queriedUser || queriedUser.isBlocked) {
+                    res.status(401).end()
+                } else {
+                    const { signJwt } = require('./jwtController');
+                    signJwt(payload.username,
+                        (err, token) => {
+                            if (err) {
+                                console.log(err);
+                                res.status(500).json({
+                                    message: 'Error while generating session token.'
+                                });
+                            } else {
+                                res.status(200).json({
+                                    user: payload.username,
+                                    token: token,
+                                    isAdmin: queriedUser.isAdmin
+                                });
+                            }
+                        }
+                    );
+                }
+            } else {
+                res.status(401).end()
+            }
+        }
+    )
 }
 
 module.exports.connectionCheck = connectionCheck;
@@ -130,3 +202,5 @@ module.exports.signinAttempt = signinAttempt;
 module.exports.isUsernameAvailable = isUsernameAvailable;
 module.exports.fetchLargestCollections = fetchLargestCollections;
 module.exports.fetchUserProfile = fetchUserProfile;
+module.exports.signupAttempt = signupAttempt;
+module.exports.verifySession = verifySession;

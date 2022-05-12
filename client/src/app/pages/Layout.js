@@ -1,5 +1,4 @@
-import { Section } from 'react-bulma-components';
-import {Outlet, Link} from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
 import Header from '../../common/header/Header';
 
 function Layout(props) {

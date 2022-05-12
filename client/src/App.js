@@ -28,8 +28,6 @@ class App extends Component {
 	state = {
 		currentLocale: localStorage.getItem(localStorageKeys.LOCALE) || locales.EN
 	}
-
-
 	
 	componentDidMount = async () => {
 		const res = await axios.get('/api/v1/connection-check');
@@ -39,12 +37,12 @@ class App extends Component {
 	}
 	
 	render() {
-		console.log(this.context);
 		return (
 			<div className="App">
 				<IntlProvider locale={this.state.currentLocale} messages={messages[this.state.currentLocale]}>
 					<ThemeContextWrapper>
 						<BrowserRouter>
+						<AuthProvider>
 						<Routes>
 								<Route
 									path="/"
@@ -59,10 +57,12 @@ class App extends Component {
 									<Route index element={<Home />} />
 									<Route path='signin' element={<SigninPage />} />
 									<Route path='search' element={<SearchPage />} />
-									<Route path='profile' element={<ProfilePage user={this.context.user} />}>
+									<Route path='profile'>
+										<Route path=':username' element={<ProfilePage />} />
 									</Route>
 								</Route>
 						</Routes>
+						</AuthProvider>
 						</BrowserRouter>
 					</ThemeContextWrapper>
 				</IntlProvider>

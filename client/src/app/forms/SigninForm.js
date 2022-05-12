@@ -12,6 +12,7 @@ class SigninForm extends React.Component {
         username: "",
         password: "",
         invalidCredentials: false,
+        sessionExpired: false,
         error: false
     }
 
@@ -66,6 +67,9 @@ class SigninForm extends React.Component {
     
     render() {
         const intl = this.props.intl;
+        if (this.props.location.state) {
+            this.setState({sessionExpired: true});
+        };
         return (
             <Box>
                 <form onSubmit={this.onSubmitEvent}>
@@ -108,6 +112,8 @@ class SigninForm extends React.Component {
                             intl.formatMessage({ id: 'signin.invalid-credentials' }) : 
                             this.state.error ?
                             intl.formatMessage({ id: 'general.error-message' }) :
+                            this.state.sessionExpired ?
+                            intl.formatMessage({ id: 'signin.session-expired' }) :
                             ''
                             }
                         </Form.Help>

@@ -15,11 +15,13 @@ General:
 - [ ] Properly displayed in mobile
 
 Authentification:
-- [ ] Sign-up and sign-in, sessions
+- [X] Sign-up and sign-in, sessions
+- [ ] ...password hashing
+- [ ] Deleting and blocking
 - [ ] Admin role (can block/delete users, create/edit content as them)
 
 Users:
-- [ ] Have their own profile pages
+- [X] Have their own profile pages
 
 Collections:
 - [ ] Custom fields (up to 15)
@@ -43,4 +45,3 @@ Items:
 
 # Issues
 
-- <App /> auth context apparently fails to update

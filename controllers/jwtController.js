@@ -24,4 +24,4 @@ const verifyJwt = (token, callback) => {
 }
 
 module.exports.signJwt = signJwt;
-module.exports.verify = verifyJwt;
+module.exports.verifyJwt = verifyJwt;
