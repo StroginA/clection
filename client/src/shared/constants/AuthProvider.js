@@ -12,12 +12,12 @@ function AuthProvider (props) {
     const [isAdmin, setAdmin] = useState(false)
     const navigate = useNavigate();
 
-    const verifySession = () => {
+    const verifySession = async () => {
         /*
         Verify the current session token and check if you are admin/blocked/deleted. 
         Sign out if blocked/deleted.
         If session expired, redirect to signin.
-        Returns 200/401/403/void
+        Returns 200/401/403/'error' (or should)
         */
         if (token) {
             axios.get(
@@ -40,14 +40,12 @@ function AuthProvider (props) {
                             signout();
                             navigate("signin", {state:{sessionExpired: true}});
                             return 401
-                        } else if (err.response.status === 403) {
-                            return 403
                         } else {
                             console.log(err.response.message)
-                        }
+                        } return 'error'
                     }
                 )
-        }
+        } else return 401
     }
 
     const signin = (auth) => {

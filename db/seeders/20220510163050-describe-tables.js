@@ -8,6 +8,8 @@ module.exports = {
     console.log(collections);
     const items =  await queryInterface.describeTable({tableName: 'Items'});
     console.log(items);
+    const likes =  await queryInterface.describeTable({tableName: 'likes'});
+    console.log(items);
   },
 
   async down (queryInterface, Sequelize) {

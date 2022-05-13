@@ -1,19 +1,20 @@
 import React from "react";
-import { Button, Card, Content, Heading, Media, Tag } from "react-bulma-components";
+import { Button, Card, Content, Heading, Media, Tag, Form, Icon } from "react-bulma-components";
 import { injectIntl } from "react-intl";
+import { Link } from "react-router-dom";
 
 class ItemBrief extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "Test Item",
-            category: "Test Category",
-            whenUploaded: "today",
+            name: this.props.name || "Test Item",
+            category: this.props.category || "Test Category",
+            createdAt: this.props.createdAt || "today",
             tags: ["foo", "bar", "baz"],
-            likes: 0,
-            commentCount: 0,
-            user: "Alice",
-            collection: "Foobarbaz"
+            likes: 12345,
+            commentCount: 345,
+            user: this.props.user || "Alice",
+            collection: this.props.collectionName || "Foobarbaz"
         }
     }
     
@@ -32,27 +33,33 @@ class ItemBrief extends React.Component {
                         <Tag>{this.state.tags[2]}</Tag>
                     </Tag.Group>
                     <p>
-                        <strong>{intl.formatMessage({id: "item.brief.category"})}:</strong> {this.state.category}
+                        <strong>{intl.formatMessage({id: "item.brief.user"})}: </strong>
+                        <Link to={`profile/${this.state.user}`}>
+                        {this.state.user}
+                        </Link>
                     </p>
                     <p>
-                        <strong>{intl.formatMessage({id: "item.brief.likes"})}:</strong> {this.state.likes}
+                        <strong>{intl.formatMessage({id: "item.brief.category"})}: </strong>{this.state.category}
                     </p>
                     <p>
-                        <strong>{intl.formatMessage({id: "item.brief.comments"})}:</strong> {this.state.commentCount}
+                        <strong>{intl.formatMessage({id: "item.brief.uploaded"})}: </strong>{this.state.createdAt}
                     </p>
-                    <p>
-                        <strong>{intl.formatMessage({id: "item.brief.uploaded"})}:</strong> {this.state.whenUploaded}
-                    </p>
+                        <Button.Group>
+                            <Button>
+                                <Icon align="left" size="small">
+                                    <i className="fas fa-heart" />
+                                </Icon>
+                                <strong></strong>{this.state.likes}
+                            </Button>
+                            <Button>
+                                <Icon align="left" size="small">
+                                    <i className="fas fa-envelope" />
+                                </Icon>
+                                <strong></strong>{this.state.commentCount}
+                            </Button>
+                        </Button.Group>
                     </Content>
                 </Card.Content>
-                <Card.Footer>
-                    <Button color="info">
-                        {intl.formatMessage({id: "item.brief.moreuser"})} {this.state.user}
-                    </Button>
-                    <Button color="info">
-                        {intl.formatMessage({id: "item.brief.morecollection"})} {this.state.collection}
-                    </Button>
-                </Card.Footer>
             </Card>
         );
     }

@@ -3,6 +3,7 @@ import React from "react";
 import { Box, Button, Heading, Columns, Block, Icon, Form } from "react-bulma-components";
 import { injectIntl } from "react-intl";
 import { AuthContext } from "../shared/constants/AuthContext";
+import { injectRouter } from "../shared/constants/injectRouter";
 
 class UserProfile extends React.Component {
     static contextType = AuthContext;
@@ -12,6 +13,8 @@ class UserProfile extends React.Component {
         isBlocked: false,
         isAdmin: false
     }
+
+    navigate = this.props.navigate;
 
     componentDidMount = () => {
         this.fetchProfile(this.props.user);
@@ -35,6 +38,83 @@ class UserProfile extends React.Component {
                 this.setState({errorStatus: "UNKNOWN_ERROR"})
             }
         )
+    }
+
+    handleDeleteUser = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin || this.context.user === this.state.name) {
+            axios.delete(
+                '/api/v1/delete-user',
+                {
+                    data: {
+                        name: this.state.name
+                    }
+                }
+            )
+            .then(
+                res => this.setState({name: this.state.name})
+            )
+        }
+    }
+
+    handleBlockUser = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin) {
+            axios.put(
+                '/api/v1/block-user',
+                {
+                    name: this.state.name
+                }
+            )
+            .then(
+                res => this.setState({isBlocked: true})
+            )
+        }
+    }
+
+    handleUnblockUser = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin) {
+            axios.put(
+                '/api/v1/unblock-user',
+                {
+                    name: this.state.name
+                }
+            )
+            .then(
+                res => this.setState({isBlocked: false})
+            )
+        }
+    }
+
+    handleMakeAdmin = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin) {
+            axios.put(
+                '/api/v1/make-admin',
+                {
+                    name: this.state.name
+                }
+            )
+            .then(
+                res => this.setState({isAdmin: true})
+            )
+        }
+    }
+
+    handleStripAdmin = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin) {
+            axios.put(
+                '/api/v1/strip-admin',
+                {
+                    name: this.state.name
+                }
+            )
+            .then(
+                res => this.setState({isAdmin: false})
+            )
+        }
     }
 
     render () {
@@ -64,6 +144,7 @@ class UserProfile extends React.Component {
                                             <Button
                                                 color='danger'
                                                 fullwidth='true'
+                                                onClick={this.handleDeleteUser}
                                             >
                                                 {intl.formatMessage({ id: 'user.delete-user' })} {this.state.name}
                                             </Button>
@@ -79,6 +160,7 @@ class UserProfile extends React.Component {
                                             <Button
                                                 color='normal'
                                                 fullwidth='true'
+                                                onClick={this.handleBlockUser}
                                             >
                                                 {intl.formatMessage({ id: 'user.block-user' })} {this.state.name}
                                             </Button>
@@ -93,6 +175,7 @@ class UserProfile extends React.Component {
                                             <Button
                                                 color='normal'
                                                 fullwidth='true'
+                                                onClick={this.handleUnblockUser}
                                             >
                                                 {intl.formatMessage({ id: 'user.unblock-user' })} {this.state.name}
                                             </Button>
@@ -107,6 +190,7 @@ class UserProfile extends React.Component {
                                             <Button
                                                 color='info'
                                                 fullwidth='true'
+                                                onClick={this.handleMakeAdmin}
                                             >
                                                 {intl.formatMessage({ id: 'user.make-admin' })} {this.state.name}
                                             </Button>
@@ -122,6 +206,7 @@ class UserProfile extends React.Component {
                                             <Button
                                                 color='danger'
                                                 fullwidth='true'
+                                                onClick={this.handleStripAdmin}
                                             >
                                                 {intl.formatMessage({ id: 'user.strip-admin' })} {this.state.name}
                                             </Button>
@@ -142,4 +227,4 @@ class UserProfile extends React.Component {
     }
 }
 
-export default injectIntl(UserProfile);
+export default injectRouter(injectIntl(UserProfile));

@@ -1,6 +1,7 @@
 import React from "react";
-import { Button, Card, Content, Media, Tag } from "react-bulma-components";
+import { Button, Card, Content, Media } from "react-bulma-components";
 import { injectIntl } from "react-intl";
+import { Link } from "react-router-dom";
 
 class CollectionBrief extends React.Component {
     constructor(props) {
@@ -8,7 +9,6 @@ class CollectionBrief extends React.Component {
         this.state = {
             name: this.props.name || "Test Collection",
             category: this.props.category || "Test Category",
-            tags: this.props.tags || ["foo", "bar", "baz"],
             user: this.props.user || "Alice",
             itemCount: this.props.itemCount || 42,
             imageSource: this.props.imageSource || "logo192.png"
@@ -20,32 +20,34 @@ class CollectionBrief extends React.Component {
         return (
             <Card justifyContent="center">
                 <Card.Header>
-                    <Card.Header.Title textSize={3}>{this.state.name}</Card.Header.Title>
+                    <Card.Header.Title textSize={3}>
+                        {this.state.name}
+                    </Card.Header.Title>
                 </Card.Header>
                 <Card.Content>
                     <Media justifyContent="center">
-                <Card.Image
-                size={128}
-                src={this.state.imageSource}
-                fallback="no_img"
-                />
-                </Media>
+                        <Card.Image
+                            size={128}
+                            src={this.state.imageSource}
+                            fallback="no_img"
+                        />
+                    </Media>
                 </Card.Content>
                 <Card.Content>
                     <Content>
-                    <Tag.Group justifyContent="center">
-                        <Tag>{this.state.tags[0]}</Tag>
-                        <Tag>{this.state.tags[1]}</Tag>
-                        <Tag>{this.state.tags[2]}</Tag>
-                    </Tag.Group>
                     <p>
-                        <strong>{intl.formatMessage({id: "collection.brief.user"})}:</strong> {this.state.user}
+                        <strong>{intl.formatMessage({id: "collection.brief.user"})}: </strong>
+                        <Link to={`profile/${this.state.user}`}>
+                        {this.state.user}
+                        </Link>
                     </p>
                     <p>
-                        <strong>{intl.formatMessage({id: "collection.brief.category"})}:</strong> {this.state.category}
+                        <strong>{intl.formatMessage({id: "collection.brief.category"})}: </strong>
+                        {this.state.category}
                     </p>
                     <p>
-                        <strong>{intl.formatMessage({id: "collection.brief.item-count"})}:</strong> {this.state.itemCount}
+                        <strong>{intl.formatMessage({id: "collection.brief.item-count"})}: </strong>
+                        {this.state.itemCount}
                     </p>
                     </Content>
                 </Card.Content>

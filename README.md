@@ -9,7 +9,7 @@ General:
 - [X] A light/dark theme switch
 - [ ] Full-text search
 - [ ] Front page has...
-- [ ] ...last added items
+- [X] ...last added items
 - [X] ...largest collections
 - [ ] ...a tag cloud
 - [ ] Properly displayed in mobile
@@ -17,8 +17,8 @@ General:
 Authentification:
 - [X] Sign-up and sign-in, sessions
 - [ ] ...password hashing
-- [ ] Deleting and blocking
-- [ ] Admin role (can block/delete users, create/edit content as them)
+- [X] Deleting and blocking
+- [X] Admin role (can block/delete users, create/edit content as them)
 
 Users:
 - [X] Have their own profile pages
@@ -44,4 +44,6 @@ Items:
 
 
 # Issues
+
+- Figure out the likes table model
 

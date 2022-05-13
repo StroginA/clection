@@ -204,10 +204,16 @@ class SignupForm extends React.Component {
                             </Icon>
                         </Form.Control>
                         <Form.Help 
-                        color="danger">
+                        color={
+                            this.state.signupSuccessful ?
+                            "success" :
+                            "danger"
+                        }>
                             {
                             this.state.confirmPassword && !this.state.passwordsMatch ? 
                             intl.formatMessage({ id: 'signin.password-no-match' }) : 
+                            this.state.signupSuccessful ?
+                            intl.formatMessage({ id: 'signin.signup-successful' }) :
                             this.state.error ?
                             intl.formatMessage({ id: 'general.error-message' }) :
                             ''

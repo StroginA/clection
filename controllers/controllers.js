@@ -100,7 +100,6 @@ const isUsernameAvailable = async (req, res, next) => {
 }
 
 const fetchLargestCollections = async (req, res, next) => {
-    // stub
     const largest = await Collection.findAll({
         attributes: {
             include: [
@@ -128,6 +127,37 @@ const fetchLargestCollections = async (req, res, next) => {
         group: ['Collection.id', 'User.id']
     });
     res.status(200).json({body: largest});
+}
+
+const fetchLatestItems = async (req, res, next) => {
+    const latest = await Item.findAll({
+        attributes: {
+            include: [
+                [db.sequelize.col('User.name'), 'user'],
+                [db.sequelize.col('CollectionId'), 'collectionId'],
+                [db.sequelize.col('Collection.name'), 'collectionName'],
+                [db.sequelize.col('Collection.category'), 'category'],
+            ]
+        },
+        include: 
+        [{
+            association: 'User',
+            attributes: [],
+            required: true,
+            duplicating: false
+        }, 
+        {
+            model: Collection,
+            attributes: [],
+            required: true,
+            duplicating: false
+        }],
+        limit: 3,
+        order: [
+            ['createdAt', 'DESC']
+        ]
+    });
+    res.status(200).json({body: latest});
 }
 
 const fetchUserProfile = async (req, res, next) => {
@@ -196,11 +226,86 @@ const verifySession = async (req, res, next) => {
     )
 }
 
+const deleteUser = async (req, res, next) => {
+    const name = req.body.name;
+    await User.destroy(
+        {
+            where:
+            {
+                name: name
+            }
+        }
+    )
+    res.status(200).end()
+}
+
+const blockUser = async (req, res, next) => {
+    const name = req.body.name;
+    await User.update(
+        { isBlocked: true },
+        {
+            where:
+            {
+                name: name
+            }
+        }
+    )
+    res.status(200).end()
+}
+
+const unblockUser = async (req, res, next) => {
+    const name = req.body.name;
+    await User.update(
+        { isBlocked: false },
+        {
+            where:
+            {
+                name: name
+            }
+        }
+    )
+    res.status(200).end()
+}
+
+const makeAdmin = async (req, res, next) => {
+    const name = req.body.name;
+    await User.update(
+        { isAdmin: true },
+        {
+            where:
+            {
+                name: name
+            }
+        }
+    )
+    res.status(200).end()
+}
+
+const stripAdmin = async (req, res, next) => {
+    const name = req.body.name;
+    await User.update(
+        { isAdmin: false },
+        {
+            where:
+            {
+                name: name
+            }
+        }
+    )
+    res.status(200).end()
+}
+
 module.exports.connectionCheck = connectionCheck;
 module.exports.dbConnectionCheck = dbConnectionCheck;
 module.exports.signinAttempt = signinAttempt;
 module.exports.isUsernameAvailable = isUsernameAvailable;
+module.exports.fetchLatestItems = fetchLatestItems;
 module.exports.fetchLargestCollections = fetchLargestCollections;
 module.exports.fetchUserProfile = fetchUserProfile;
 module.exports.signupAttempt = signupAttempt;
 module.exports.verifySession = verifySession;
+module.exports.deleteUser = deleteUser;
+module.exports.blockUser = blockUser;
+module.exports.unblockUser = unblockUser;
+module.exports.makeAdmin = makeAdmin;
+module.exports.stripAdmin = stripAdmin;
