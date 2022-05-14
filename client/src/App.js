@@ -17,6 +17,7 @@ import SearchPage from './app/pages/SearchPage';
 import ProfilePage from './app/pages/ProfilePage';
 import AuthProvider from './shared/constants/AuthProvider';
 import { AuthContext } from './shared/constants/AuthContext';
+import CollectionPage from './app/pages/CollectionPage';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -59,6 +60,9 @@ class App extends Component {
 									<Route path='search' element={<SearchPage />} />
 									<Route path='profile'>
 										<Route path=':username' element={<ProfilePage />} />
+									</Route>
+									<Route path='collection'>
+										<Route path=':collectionId' element={<CollectionPage />} />
 									</Route>
 								</Route>
 						</Routes>

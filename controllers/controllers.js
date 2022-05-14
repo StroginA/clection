@@ -163,7 +163,7 @@ const fetchLatestItems = async (req, res, next) => {
 const fetchUserProfile = async (req, res, next) => {
     const queriedUser = await User.findOne(
         {
-            attributes: ['name', 'isBlocked', 'isAdmin'],
+            attributes: ['name', 'isBlocked', 'isAdmin', 'id'],
             where: {
                 name: req.query.name
             }
@@ -176,6 +176,42 @@ const fetchUserProfile = async (req, res, next) => {
             ...queriedUser.dataValues
         })
     }
+}
+
+const fetchUserCollections = async (req, res, next) => {
+    const user = await User.findOne({
+        attributes: {
+            include: ['name']
+        },
+        where:{
+            name: req.query.UserName
+        }
+    });
+    const userCollections = await user.getCollections({
+        attributes: {
+            include: [
+                [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'itemCount'],
+                [db.sequelize.col('User.name'), 'user']
+            ]
+        },
+        include: 
+        [{
+            model: Item,
+            attributes: [],
+            required: true,
+            duplicating: false
+        },
+        {
+            model: User,
+            attributes: []
+        }
+        ],
+        order: [
+            [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'DESC']
+        ],
+        group: ['Collection.id', 'User.name']
+    });
+    res.status(200).json({body: userCollections});
 }
 
 const verifySession = async (req, res, next) => {
@@ -309,3 +345,4 @@ module.exports.blockUser = blockUser;
 module.exports.unblockUser = unblockUser;
 module.exports.makeAdmin = makeAdmin;
 module.exports.stripAdmin = stripAdmin;
+module.exports.fetchUserCollections = fetchUserCollections;

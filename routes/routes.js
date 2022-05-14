@@ -16,5 +16,6 @@ router.put('/block-user', controllers.blockUser);
 router.put('/unblock-user', controllers.unblockUser);
 router.put('/make-admin', controllers.makeAdmin);
 router.put('/strip-admin', controllers.stripAdmin);
+router.get('/fetch-user-collections', controllers.fetchUserCollections);
 
 module.exports = router;

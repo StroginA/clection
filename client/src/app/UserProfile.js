@@ -1,9 +1,10 @@
 import axios from "axios";
 import React from "react";
-import { Box, Button, Heading, Columns, Block, Icon, Form } from "react-bulma-components";
+import { Box, Button, Heading, Columns, Block, Icon, Form, Level } from "react-bulma-components";
 import { injectIntl } from "react-intl";
 import { AuthContext } from "../shared/constants/AuthContext";
 import { injectRouter } from "../shared/constants/injectRouter";
+import CollectionBrief from "./elements/CollectionBrief";
 
 class UserProfile extends React.Component {
     static contextType = AuthContext;
@@ -11,23 +12,27 @@ class UserProfile extends React.Component {
         name: "",
         errorStatus: "",
         isBlocked: false,
-        isAdmin: false
+        isAdmin: false,
+        collections: [],
+        id: 0
     }
 
     navigate = this.props.navigate;
 
-    componentDidMount = () => {
-        this.fetchProfile(this.props.user);
+    componentDidMount = async () => {
+        await this.fetchProfile();
+        this.fetchCollections();
     }
 
-    fetchProfile = async (user) => {
-        await axios.get('/api/v1/fetch-user-profile', {params: {name: user}})
+    fetchProfile = () => {
+        axios.get('/api/v1/fetch-user-profile', {params: {name: this.props.user}})
         .then(
             res => {
                 this.setState({
                     name: res.data.name,
                     isBlocked: res.data.isBlocked,
-                    isAdmin: res.data.isAdmin
+                    isAdmin: res.data.isAdmin,
+                    id: res.data.id
                 })
             }
         )
@@ -38,6 +43,21 @@ class UserProfile extends React.Component {
                 this.setState({errorStatus: "UNKNOWN_ERROR"})
             }
         )
+    }
+
+    fetchCollections = async () => {
+        await axios.get(
+            '/api/v1/fetch-user-collections',
+            {
+                params: {
+                    UserName: this.props.user
+                }
+            }
+        )
+        .then(res => {
+            this.setState({collections: res.data.body});
+        })
+        .catch(() => this.setState({error: true}));
     }
 
     handleDeleteUser = async () => {
@@ -117,6 +137,22 @@ class UserProfile extends React.Component {
         }
     }
 
+    Collections = () => {
+        return (
+            <Level.Side aligns="left">
+                {this.state.collections.map(this.wrapElement)}
+            </Level.Side>
+        )
+    }
+
+    wrapElement = (props) => {
+        return (
+            <Level.Item key={props.id}>
+                {CollectionBrief(props)}
+            </Level.Item>
+        )
+    }
+
     render () {
         const intl = this.props.intl;
         return (
@@ -138,6 +174,7 @@ class UserProfile extends React.Component {
                             </Heading>
                             <Columns>
                                 <Columns.Column size={3}>
+                                    <Box>
                                     {((this.context.user === this.state.name) || this.context.isAdmin) &&
                                     <Form.Field>
                                         <Form.Control>
@@ -215,9 +252,17 @@ class UserProfile extends React.Component {
                                             </Icon>
                                         </Form.Control>
                                     </Form.Field>}
+                                    </Box>
                                 </Columns.Column>
                                 <Columns.Column size='auto'>
-
+                                    <Box>
+                                        <Heading>
+                                            {intl.formatMessage({ id: "user.collections" })}
+                                        </Heading>
+                                        <Level>
+                                            <this.Collections />
+                                        </Level>
+                                    </Box>
                                 </Columns.Column>
                             </Columns>
                         </>

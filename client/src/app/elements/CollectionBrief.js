@@ -7,11 +7,12 @@ class CollectionBrief extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.id,
             name: this.props.name || "Test Collection",
             category: this.props.category || "Test Category",
-            user: this.props.user || "Alice",
+            user: this.props.user,
             itemCount: this.props.itemCount || 42,
-            imageSource: this.props.imageSource || "logo192.png"
+            imageSource: this.props.imageSource || "/logo192.png"
         }
     }
     
@@ -21,7 +22,9 @@ class CollectionBrief extends React.Component {
             <Card justifyContent="center">
                 <Card.Header>
                     <Card.Header.Title textSize={3}>
+                    <Link to={`/collection/${this.state.id}`}>
                         {this.state.name}
+                    </Link>
                     </Card.Header.Title>
                 </Card.Header>
                 <Card.Content>
@@ -37,7 +40,7 @@ class CollectionBrief extends React.Component {
                     <Content>
                     <p>
                         <strong>{intl.formatMessage({id: "collection.brief.user"})}: </strong>
-                        <Link to={`profile/${this.state.user}`}>
+                        <Link to={`/profile/${this.state.user}`}>
                         {this.state.user}
                         </Link>
                     </p>
