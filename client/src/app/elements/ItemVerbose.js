@@ -14,7 +14,7 @@ class ItemVerbose extends React.Component {
         name: "",
         category: "",
         user: "",
-        likes: 0,
+        likeCount: 0,
         comment: "",
         commentError: ""
     }
@@ -40,7 +40,8 @@ class ItemVerbose extends React.Component {
                     user: res.data.user,
                     collectionName: res.data.collection,
                     collectionId: res.data.CollectionId,
-                    createdAt: res.data.createdAt
+                    createdAt: res.data.createdAt,
+                    likeCount: res.data.likeCount
                 })
             }
         )
@@ -53,10 +54,30 @@ class ItemVerbose extends React.Component {
         )
     }
 
+    handleLikeToggle = async () => {
+        await this.context.verifySession();
+        if (this.context.user) {
+            axios.post(
+                '/api/v1/toggle-like',
+                {
+                    id: this.props.id,
+                    user: this.context.user
+                }
+            ).then(
+                res => {
+                    if (res.status === 200) {
+                        this.setState({likeCount: this.state.likeCount - 1})
+                    } else if (res.status === 201) {
+                        this.setState({likeCount: this.state.likeCount + 1})
+                    }
+                }
+            )
+        }
+    }
+
     onSubmitEvent = async (e) => {
         e.preventDefault();
         await this.context.verifySession();
-        console.log(this.state.comment);
         if (this.context.user && this.state.comment) {
             axios.post(
                 '/api/v1/post-comment',
@@ -105,11 +126,13 @@ class ItemVerbose extends React.Component {
                         <strong>{intl.formatMessage({id: "item.uploaded"})}: </strong>{this.state.createdAt}
                     </p>
                     </Section>
-                            <Button>
+                            <Button
+                            onClick={this.handleLikeToggle}
+                            >
                                 <Icon align="left" size="small">
                                     <i className="fas fa-heart" />
                                 </Icon>
-                                <strong></strong>{this.state.likes}
+                                <strong></strong>{this.state.likeCount}
                             </Button>
                             <Box>
                                 <Heading size={4}>

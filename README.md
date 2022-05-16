@@ -40,7 +40,7 @@ Items:
 - [ ] ...with autocompletion hints
 - [X] Comments
 - [ ] ...updated in real time
-- [ ] Likes (1 per user)
+- [X] Likes (1 per user)
 
 
 # Issues

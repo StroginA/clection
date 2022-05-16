@@ -25,5 +25,6 @@ router.get('/fetch-collection', fetch.fetchCollection);
 router.get('/fetch-item', fetch.fetchItem);
 router.get('/fetch-comments', fetch.fetchComments);
 router.post('/post-comment', post.postComment);
+router.post('/toggle-like', post.toggleLike)
 
 module.exports = router;

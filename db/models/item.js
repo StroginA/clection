@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.Collection, { onDelete: 'CASCADE' });
             this.hasMany(models.Snippet);
             this.hasMany(models.Comment);
-            this.belongsToMany(models.User, {through: 'Likes'});
+            this.belongsToMany(models.User, {through: models.UserItem, as: 'UserItems', foreignKey: 'ItemId', onDelete: 'cascade'});
             this.belongsToMany(models.Tag, {through: 'ItemTags'});
         }
     }

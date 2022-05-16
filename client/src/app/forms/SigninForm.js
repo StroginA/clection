@@ -69,6 +69,7 @@ class SigninForm extends React.Component {
         const intl = this.props.intl;
         if (this.props.location.state) {
             this.setState({sessionExpired: true});
+            this.props.location.state = "";
         };
         return (
             <Box>
