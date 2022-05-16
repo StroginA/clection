@@ -61,7 +61,7 @@ const signinAttempt = async (req, res, next) => {
             message: 'Invalid combination of username and password.'
         });
     } else {
-        const { signJwt } = require('./jwtController');
+        const { signJwt } = require('./jwtManager');
         signJwt(auth.username,
             (err, token) => {
                 if (err) {
@@ -222,7 +222,7 @@ const verifySession = async (req, res, next) => {
     If unsuccessful/user deleted/blocked, respond with 401
     */
     const token = req.query.token
-    const { verifyJwt } = require('./jwtController');
+    const { verifyJwt } = require('./jwtManager');
     verifyJwt(token,
         async (err, payload) => {
             if (payload) {
@@ -237,7 +237,7 @@ const verifySession = async (req, res, next) => {
                 if (!queriedUser || queriedUser.isBlocked) {
                     res.status(401).end()
                 } else {
-                    const { signJwt } = require('./jwtController');
+                    const { signJwt } = require('./jwtManager');
                     signJwt(payload.username,
                         (err, token) => {
                             if (err) {
