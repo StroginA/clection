@@ -118,7 +118,93 @@ const fetchUserCollections = async (req, res, next) => {
     res.status(200).json({body: userCollections});
 }
 
+const fetchCollection = async (req, res, next) => {
+    const collection = await Collection.findByPk(
+        req.query.id,
+        {
+            attributes: {
+                include: [
+                    [db.sequelize.col('User.name'), 'user']
+                ]
+            },
+            include: [{
+                model: Item,
+                duplicating: false
+            }, 
+            {
+                model: User,
+                attributes: []
+            }]
+        }
+    )
+    if (!collection) {
+        res.status(404).end()
+    } else {
+        res.status(200).json({
+            ...collection.dataValues
+        })
+    }
+}
+
+const fetchItem = async (req, res, next) => {
+    const item = await Item.findByPk(
+        req.query.id,
+        {
+            attributes: {
+                include: [
+                    [db.sequelize.col('User.name'), 'user'],
+                    [db.sequelize.col('Collection.name'), 'collection'],
+                    [db.sequelize.col('Collection.category'), 'category']
+                ]
+            },
+            include: [{
+                model: User,
+                attributes: []
+            },
+            {
+                model: Collection,
+                attributes: []
+            }
+            ]
+        }
+    )
+    if (!item) {
+        res.status(404).end()
+    } else {
+        res.status(200).json({
+            ...item.dataValues
+        })
+    }
+}
+
+const fetchComments = async (req, res, next) => {
+    const item = await Item.findByPk(
+        req.query.id
+    );
+    const comments = await item.getComments({
+        attributes: {
+            include: [
+                [db.sequelize.col('User.name'), 'author']
+            ]
+        },
+        include: [{
+            model: User,
+            attributes: []
+        }]
+    })
+    if (!comments) {
+        res.status(404).end()
+    } else {
+        res.status(200).json({
+            body: comments
+        })
+    }
+}
+
 module.exports.fetchLatestItems = fetchLatestItems;
 module.exports.fetchLargestCollections = fetchLargestCollections;
 module.exports.fetchUserProfile = fetchUserProfile;
 module.exports.fetchUserCollections = fetchUserCollections;
+module.exports.fetchCollection = fetchCollection;
+module.exports.fetchItem = fetchItem;
+module.exports.fetchComments = fetchComments;

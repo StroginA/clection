@@ -4,6 +4,7 @@ const fetch = require('../controllers/fetchControllers');
 const general = require('../controllers/generalControllers');
 const session = require('../controllers/sessionControllers');
 const user = require('../controllers/userManagementControllers');
+const post = require('../controllers/postControllers')
 
 router.get('/connection-check', general.connectionCheck);
 router.get('/db-connection-check', general.dbConnectionCheck);
@@ -20,5 +21,9 @@ router.get('/fetch-latest-items', fetch.fetchLatestItems);
 router.get('/fetch-largest-collections', fetch.fetchLargestCollections);
 router.get('/fetch-user-profile', fetch.fetchUserProfile);
 router.get('/fetch-user-collections', fetch.fetchUserCollections);
+router.get('/fetch-collection', fetch.fetchCollection);
+router.get('/fetch-item', fetch.fetchItem);
+router.get('/fetch-comments', fetch.fetchComments);
+router.post('/post-comment', post.postComment);
 
 module.exports = router;

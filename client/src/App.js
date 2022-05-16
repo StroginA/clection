@@ -18,6 +18,7 @@ import ProfilePage from './app/pages/ProfilePage';
 import AuthProvider from './shared/constants/AuthProvider';
 import { AuthContext } from './shared/constants/AuthContext';
 import CollectionPage from './app/pages/CollectionPage';
+import ItemPage from './app/pages/ItemPage';
 
 const messages = {
 	[locales.EN]: enMessages,
@@ -63,6 +64,9 @@ class App extends Component {
 									</Route>
 									<Route path='collection'>
 										<Route path=':collectionId' element={<CollectionPage />} />
+									</Route>
+									<Route path='item'>
+										<Route path=':itemId' element={<ItemPage />} />
 									</Route>
 								</Route>
 						</Routes>

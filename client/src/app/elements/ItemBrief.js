@@ -23,7 +23,11 @@ class ItemBrief extends React.Component {
         return (
             <Card>
                 <Card.Header>
-                    <Card.Header.Title textSize={3}>{this.state.name}</Card.Header.Title>
+                    <Card.Header.Title textSize={3}>
+                    <Link to={`/item/${this.props.id}`}>
+                        {this.state.name}
+                    </Link>
+                    </Card.Header.Title>
                 </Card.Header>
                 <Card.Content>
                     <Content>

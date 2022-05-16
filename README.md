@@ -30,7 +30,7 @@ Collections:
 - [ ] ...text (markdown)
 - [ ] ...date
 - [ ] ...checkbox
-- [ ] Items table
+- [X] Items table
 - [ ] ...with filters and sorting
 - [ ] Optional image
 - [ ] ...off-server hosting
@@ -38,7 +38,7 @@ Collections:
 Items:
 - [ ] Tags
 - [ ] ...with autocompletion hints
-- [ ] Comments
+- [X] Comments
 - [ ] ...updated in real time
 - [ ] Likes (1 per user)
 
