@@ -5,6 +5,8 @@ import { injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../shared/constants/AuthContext";
 import { injectRouter } from "../../shared/constants/injectRouter";
+import ReactMarkdown from "react-markdown";
+import CreateItemForm from "./CreateItemForm";
 
 class CollectionVerbose extends React.Component {
     static contextType = AuthContext;
@@ -15,8 +17,11 @@ class CollectionVerbose extends React.Component {
         user: "",
         itemCount: 0,
         imageSource: "/logo192.png",
-        items: []
+        items: [],
+        creatingItem: false
     }
+
+    navigate = this.props.navigate;
     
     componentDidMount = async () => {
         this.fetchCollection();
@@ -38,8 +43,10 @@ class CollectionVerbose extends React.Component {
                     category: res.data.category,
                     user: res.data.user,
                     itemCount: res.data.Items.length || 0,
+                    description: res.data.description || "",
                     imageSource: res.data.imageSource || "/logo192.png",
-                    items: res.data.Items || []
+                    items: res.data.Items || [],
+                    customFields: res.data.customFields || []
                 })
             }
         )
@@ -50,6 +57,27 @@ class CollectionVerbose extends React.Component {
                 this.setState({errorStatus: "UNKNOWN_ERROR"})
             }
         )
+    }
+
+    handleDeleteCollection = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin || this.context.user === this.state.user) {
+            axios.delete(
+                '/api/v1/delete-collection',
+                {
+                    data: {
+                        id: this.props.id
+                    }
+                }
+            )
+            .then(
+                res => {this.navigate(`/profile/${this.state.user}`)}
+            )
+        }
+    }
+
+    openItemForm = () => {
+        this.setState({creatingItem: true});
     }
 
     ItemsTable = (props) => {
@@ -117,12 +145,41 @@ class CollectionVerbose extends React.Component {
                                 </p>
                                 <p>
                                     <strong>{intl.formatMessage({ id: "collection.category" })}: </strong>
-                                    {this.state.category}
+                                    {intl.formatMessage({id: `category.${this.state.category}`})}
                                 </p>
                                 <p>
                                     <strong>{intl.formatMessage({ id: "collection.item-count" })}: </strong>
                                     {this.state.itemCount}
                                 </p>
+                                <p>
+                                    <strong>{intl.formatMessage({ id: "collection.description" })}: </strong>
+                                    <ReactMarkdown>{this.state.description}</ReactMarkdown>
+                                </p>
+                                
+                                {
+                                        !this.state.creatingItem ?
+                                        <Button
+                                        color='info'
+                                        invisible={!((this.context.user === this.state.name) || this.context.isAdmin)}
+                                        onClick={this.openItemForm}
+                                        >
+                                            {intl.formatMessage({ id: "user.items.create-item" })}
+                                        </Button> :
+                                        <Box>
+                                            <CreateItemForm 
+                                            userName={this.state.user}
+                                            collectionId={this.state.id}/>
+                                        </Box>
+                                    }
+                            </Columns.Column>
+                            <Columns.Column size={2}>
+                            {((this.context.user === this.state.user) || this.context.isAdmin) &&
+                                <Button
+                                color='danger'
+                                onClick={this.handleDeleteCollection}
+                                >
+                                {intl.formatMessage({ id: "collection.delete" })}
+                                </Button>}
                             </Columns.Column>
                         </Columns>
                     </Section>
@@ -133,6 +190,7 @@ class CollectionVerbose extends React.Component {
                         <this.ItemsTable 
                         name={intl.formatMessage({ id: 'collection.item.name' })}
                         createdAt={intl.formatMessage({ id: 'collection.item.createdAt' })}
+                        customFields={this.state.customFields}
                         />
                     </Section>
                 </>}

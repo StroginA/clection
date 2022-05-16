@@ -1,9 +1,8 @@
 const db = require('../db/models/index');
+const { verifyPassword } = require('./verifyPassword');
 const User = db.sequelize.models.User;
 
 const signinAttempt = async (req, res, next) => {
-    // stub
-    // implement hashing+salting later !!!
     const auth = req.body.auth;
     const queriedUser = await User.findOne(
         {
@@ -14,7 +13,8 @@ const signinAttempt = async (req, res, next) => {
             }
         }
     );
-    if (!queriedUser || (queriedUser.password != auth.password)) {
+    const isCorrect = verifyPassword(auth.password, queriedUser.password);
+    if (!queriedUser || (!isCorrect)) {
         res.status(401).json({
             message: 'Invalid combination of username and password.'
         });

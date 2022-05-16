@@ -5,6 +5,7 @@ import { injectIntl } from "react-intl";
 import { AuthContext } from "../shared/constants/AuthContext";
 import { injectRouter } from "../shared/constants/injectRouter";
 import CollectionBrief from "./elements/CollectionBrief";
+import CreateCollectionForm from "./elements/CreateCollectionForm";
 
 class UserProfile extends React.Component {
     static contextType = AuthContext;
@@ -14,7 +15,8 @@ class UserProfile extends React.Component {
         isBlocked: false,
         isAdmin: false,
         collections: [],
-        id: 0
+        id: 0,
+        creatingCollection: false
     }
 
     navigate = this.props.navigate;
@@ -54,10 +56,10 @@ class UserProfile extends React.Component {
                 }
             }
         )
-        .then(res => {
-            this.setState({collections: res.data.body});
-        })
-        .catch(() => this.setState({error: true}));
+            .then(res => {
+                this.setState({ collections: res.data.body });
+            })
+            .catch(() => this.setState({ error: true }));
     }
 
     handleDeleteUser = async () => {
@@ -72,7 +74,7 @@ class UserProfile extends React.Component {
                 }
             )
             .then(
-                res => this.setState({name: this.state.name})
+                res => {this.navigate(`/profile/${this.state.user}`)}
             )
         }
     }
@@ -151,6 +153,10 @@ class UserProfile extends React.Component {
                 {CollectionBrief(props)}
             </Level.Item>
         )
+    }
+
+    openCollectionForm = () => {
+        this.setState({creatingCollection: true});
     }
 
     render () {
@@ -263,6 +269,19 @@ class UserProfile extends React.Component {
                                             <this.Collections />
                                         </Level>
                                     </Box>
+                                    {
+                                        !this.state.creatingCollection ?
+                                        <Button
+                                        color='info'
+                                        invisible={!((this.context.user === this.state.name) || this.context.isAdmin)}
+                                        onClick={this.openCollectionForm}
+                                        >
+                                            {intl.formatMessage({ id: "user.collections.create-collection" })}
+                                        </Button> :
+                                        <Box>
+                                            <CreateCollectionForm userName={this.state.name} userId={this.state.id}/>
+                                        </Box>
+                                    }
                                 </Columns.Column>
                             </Columns>
                         </>

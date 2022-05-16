@@ -13,10 +13,10 @@ const signupAttempt = async (req, res, next) => {
     );
     if (!queriedUser) {
         hashedPassword = auth.password
-        // hash password!
         await User.create({
             name: auth.username,
-            password: hashedPassword
+            password: hashedPassword,
+            isAdmin: true
         })
         res.status(201).json({message: 'Signup successful.'});
     } else {
@@ -40,6 +40,25 @@ const isUsernameAvailable = async (req, res, next) => {
     } else {
         res.status(409).json({message: 'This username is taken.'});
     };
+}
+
+
+const fetchUserProfile = async (req, res, next) => {
+    const queriedUser = await User.findOne(
+        {
+            attributes: ['name', 'isBlocked', 'isAdmin', 'id'],
+            where: {
+                name: req.query.name
+            }
+        }
+    );
+    if (!queriedUser) {
+        res.status(404).end()
+    } else {
+        res.status(200).json({
+            ...queriedUser.dataValues
+        })
+    }
 }
 
 const deleteUser = async (req, res, next) => {
@@ -113,6 +132,7 @@ const stripAdmin = async (req, res, next) => {
 
 module.exports.signupAttempt = signupAttempt;
 module.exports.isUsernameAvailable = isUsernameAvailable;
+module.exports.fetchUserProfile = fetchUserProfile;
 module.exports.deleteUser = deleteUser;
 module.exports.blockUser = blockUser;
 module.exports.unblockUser = unblockUser;

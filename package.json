@@ -27,7 +27,8 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
-    "sequelize": "^6.19.0"
+    "sequelize": "^6.19.0",
+    "sjcl": "^1.0.8"
   },
   "devDependencies": {
     "concurrently": "^7.1.0",

@@ -67,6 +67,12 @@ class ItemBrief extends React.Component {
                         </Link>
                     </p>
                     <p>
+                        <strong>{intl.formatMessage({id: "item.brief.collection"})}: </strong>
+                        <Link to={`/collection/${this.props.collectionId}`}>
+                        {this.state.collection}
+                        </Link>
+                    </p>
+                    <p>
                         <strong>{intl.formatMessage({id: "item.brief.category"})}: </strong>{this.state.category}
                     </p>
                     <p>

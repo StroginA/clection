@@ -16,7 +16,7 @@ General:
 
 Authentification:
 - [X] Sign-up and sign-in, sessions
-- [ ] ...password hashing
+- [X] ...password hashing
 - [X] Deleting and blocking
 - [X] Admin role (can block/delete users, create/edit content as them)
 
@@ -24,7 +24,7 @@ Users:
 - [X] Have their own profile pages
 
 Collections:
-- [ ] Custom fields (up to 15)
+- [X] Custom fields (up to 15)
 - [ ] ...number
 - [ ] ...string
 - [ ] ...text (markdown)
@@ -45,5 +45,4 @@ Items:
 
 # Issues
 
-- Figure out the likes table model
 

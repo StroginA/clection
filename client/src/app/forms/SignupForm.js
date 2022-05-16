@@ -3,6 +3,7 @@ import axios from "axios";
 import { injectIntl } from "react-intl";
 import { Box, Form, Icon, Heading, Button } from "react-bulma-components";
 import debounce from "lodash.debounce";
+import { hashPassword } from "../elements/hashPassword";
 
 class SignupForm extends React.Component {
     state = {
@@ -72,7 +73,7 @@ class SignupForm extends React.Component {
                 auth: 
                 {
                     username: this.state.username,
-                    password: this.state.password
+                    password: hashPassword(this.state.password)
                 }
             }
         )

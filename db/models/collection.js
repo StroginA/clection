@@ -30,9 +30,25 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        description: DataTypes.TEXT,
         imageSource: {
             type: DataTypes.STRING
-        }
+        },
+        num0: DataTypes.STRING,
+        num1: DataTypes.STRING,
+        num2: DataTypes.STRING,
+        str0: DataTypes.STRING,
+        str1: DataTypes.STRING,
+        str2: DataTypes.STRING,
+        txt0: DataTypes.STRING,
+        txt1: DataTypes.STRING,
+        txt2: DataTypes.STRING,
+        dat0: DataTypes.STRING,
+        dat1: DataTypes.STRING,
+        dat2: DataTypes.STRING,
+        chk0: DataTypes.STRING,
+        chk1: DataTypes.STRING,
+        chk2: DataTypes.STRING
     }, {
         sequelize,
         modelName: 'Collection',

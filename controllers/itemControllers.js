@@ -1,39 +1,9 @@
 const db = require('../db/models/index');
-const UserItem = require('../db/models/userItem');
 const User = db.sequelize.models.User;
 const Collection = db.sequelize.models.Collection;
 const Item = db.sequelize.models.Item;
 const Comment = db.sequelize.models.Comment;
-
-const fetchLargestCollections = async (req, res, next) => {
-    const largest = await Collection.findAll({
-        attributes: {
-            include: [
-                [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'itemCount'],
-                [db.sequelize.col('User.name'), 'user']
-            ]
-        },
-        include: 
-        [{
-            model: User,
-            attributes: [],
-            required: true,
-            duplicating: false
-        }, 
-        {
-            model: Item,
-            attributes: [],
-            required: true,
-            duplicating: false
-        }],
-        limit: 3,
-        order: [
-            [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'DESC']
-        ],
-        group: ['Collection.id', 'User.id']
-    });
-    res.status(200).json({body: largest});
-}
+const UserItem = db.sequelize.models.UserItem;
 
 const fetchLatestItems = async (req, res, next) => {
     const latest = await Item.findAll({
@@ -83,87 +53,6 @@ const fetchLatestItems = async (req, res, next) => {
     res.status(200).json({body: latest});
 }
 
-const fetchUserProfile = async (req, res, next) => {
-    const queriedUser = await User.findOne(
-        {
-            attributes: ['name', 'isBlocked', 'isAdmin', 'id'],
-            where: {
-                name: req.query.name
-            }
-        }
-    );
-    if (!queriedUser) {
-        res.status(404).end()
-    } else {
-        res.status(200).json({
-            ...queriedUser.dataValues
-        })
-    }
-}
-
-const fetchUserCollections = async (req, res, next) => {
-    const user = await User.findOne({
-        attributes: {
-            include: ['name']
-        },
-        where:{
-            name: req.query.UserName
-        }
-    });
-    const userCollections = await user.getCollections({
-        attributes: {
-            include: [
-                [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'itemCount'],
-                [db.sequelize.col('User.name'), 'user']
-            ]
-        },
-        include: 
-        [{
-            model: Item,
-            attributes: [],
-            required: true,
-            duplicating: false
-        },
-        {
-            model: User,
-            attributes: []
-        }
-        ],
-        order: [
-            [db.sequelize.fn('count', db.sequelize.col('Items.id')), 'DESC']
-        ],
-        group: ['Collection.id', 'User.name']
-    });
-    res.status(200).json({body: userCollections});
-}
-
-const fetchCollection = async (req, res, next) => {
-    const collection = await Collection.findByPk(
-        req.query.id,
-        {
-            attributes: {
-                include: [
-                    [db.sequelize.col('User.name'), 'user']
-                ]
-            },
-            include: [{
-                model: Item,
-                duplicating: false
-            }, 
-            {
-                model: User,
-                attributes: []
-            }]
-        }
-    )
-    if (!collection) {
-        res.status(404).end()
-    } else {
-        res.status(200).json({
-            ...collection.dataValues
-        })
-    }
-}
 
 const fetchItem = async (req, res, next) => {
     const item = await Item.findByPk(
@@ -231,10 +120,83 @@ const fetchComments = async (req, res, next) => {
     }
 }
 
+const postComment = async (req, res, next) => {
+    const author = await User.findOne({
+        where: {
+            name: req.body.comment.author
+        }
+    });
+    const item = await Item.findByPk(req.body.comment.id);
+    const createdComment = await item.createComment(
+        {
+            body: req.body.comment.body,
+            UserId: author.id
+        }
+    );
+    if (createdComment) {
+        res.status(201).json({createdComment});
+    } else {
+        res.status(500).end();
+    }
+}
+
+const toggleLike = async (req, res, next) => {
+    const user = await User.findOne({
+        where: {
+            name: req.body.user
+        }
+    });
+    const [like, created] = await UserItem.findOrCreate(
+        {
+            where: {
+                UserId: user.id,
+                ItemId: req.body.id
+            },
+            defaults: {
+                UserId: user.id,
+                ItemId: req.body.id
+            }
+        }
+    );
+    if (!created) {
+        await like.destroy()
+        res.status(200).end()
+    } else {
+        res.status(201).end()
+    }
+}
+
+const postItem = async (req, res, next) => {
+    const user = await User.findOne({where: {name: req.body.UserName}});
+    const collection = await Collection.findByPk(req.body.CollectionId);
+    const newItem = await collection.createItem({
+        name: req.body.name,
+        UserId: user.id
+    });
+    if (newItem) {
+        res.status(201).json(newItem);
+    } else {
+        res.status(500).end();
+    }
+}
+
+const deleteItem = async (req, res, next) => {
+    const id = req.body.id;
+    await Item.destroy(
+        {
+            where:
+            {
+                id: id
+            }
+        }
+    )
+    res.status(200).end()
+}
+
 module.exports.fetchLatestItems = fetchLatestItems;
-module.exports.fetchLargestCollections = fetchLargestCollections;
-module.exports.fetchUserProfile = fetchUserProfile;
-module.exports.fetchUserCollections = fetchUserCollections;
-module.exports.fetchCollection = fetchCollection;
 module.exports.fetchItem = fetchItem;
 module.exports.fetchComments = fetchComments;
+module.exports.postComment = postComment;
+module.exports.toggleLike = toggleLike;
+module.exports.postItem = postItem;
+module.exports.deleteItem = deleteItem;

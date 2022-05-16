@@ -94,6 +94,23 @@ class ItemVerbose extends React.Component {
         }
     }
 
+    handleDeleteItem = async () => {
+        await this.context.verifySession();
+        if (this.context.isAdmin || this.context.user === this.state.user) {
+            axios.delete(
+                '/api/v1/delete-item',
+                {
+                    data: {
+                        id: this.props.id
+                    }
+                }
+            )
+            .then(
+                res => {this.navigate(`/profile/${this.state.user}`)}
+            )
+        }
+    }
+
     render() {
         const intl = this.props.intl;
         return (
@@ -168,6 +185,15 @@ class ItemVerbose extends React.Component {
                             </Box>
                     </Columns.Column>
                     <Columns.Column size={3}>
+                    </Columns.Column>
+                    <Columns.Column size={2}>
+                    {((this.context.user === this.state.user) || this.context.isAdmin) &&
+                                <Button
+                                color='danger'
+                                onClick={this.handleDeleteItem}
+                                >
+                                {intl.formatMessage({ id: "item.delete" })}
+                                </Button>}
                     </Columns.Column>
                     </Columns>
                 </>}

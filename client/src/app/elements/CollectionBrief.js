@@ -46,7 +46,7 @@ class CollectionBrief extends React.Component {
                     </p>
                     <p>
                         <strong>{intl.formatMessage({id: "collection.brief.category"})}: </strong>
-                        {this.state.category}
+                        {intl.formatMessage({id: `category.${this.state.category}`})}
                     </p>
                     <p>
                         <strong>{intl.formatMessage({id: "collection.brief.item-count"})}: </strong>
